@@ -11,6 +11,9 @@ left most separator = 9 & 1
 right most separator = 8 & 1
 */
 
+const int SEVEN_SEG_DIGIT_1 = 21;
+const int SEVEN_SEG_DIGIT_2 = 22;
+
 const int SEVEN_SEG_A = 19;
 const int SEVEN_SEG_B = 18;
 const int SEVEN_SEG_C = 17;
@@ -22,6 +25,32 @@ const int SEVEN_SEG_G = 13;
 /* Change depending on whether common anode or common cathode */
 #define LED_ON LOW
 #define LED_OFF HIGH
+
+void TurnDigitOn(int digit) {
+  if (digit <= 0) return;
+  if (digit > 2) return;
+  switch (digit) {
+    case 1:
+      digitalWrite(SEVEN_SEG_DIGIT_1, LED_OFF);
+      break;
+    case 2:
+      digitalWrite(SEVEN_SEG_DIGIT_2, LED_OFF);
+      break;
+  }
+}
+
+void TurnDigitOff(int digit) {
+  if (digit <= 0) return;
+  if (digit > 2) return;
+  switch (digit) {
+    case 1:
+      digitalWrite(SEVEN_SEG_DIGIT_1, LED_ON);
+      break;
+    case 2:
+      digitalWrite(SEVEN_SEG_DIGIT_2, LED_ON);
+      break;
+  }
+}
 
 void SEVENSegmentDisplayDigit(int digit) {
   switch (digit) {
@@ -154,17 +183,29 @@ void setup() {
   // put your setup code here, to run once:
   SEVENSegmentSetAllPinsAsOutput();
 
+  pinMode(SEVEN_SEG_DIGIT_1, OUTPUT);
+  pinMode(SEVEN_SEG_DIGIT_2, OUTPUT);
+
   // Turn on all segments on by displaying the number 8
+  TurnDigitOn(1);
   SEVENSegmentDisplayDigit(8);
-  delay(5000);
+  delay(1000);
+  TurnDigitOff(1);
+  TurnDigitOn(2);
+  delay(1000);
   SEVENSegmentDisplayOff();
+  TurnDigitOff(2);
   delay(1000);
 }
 
 void loop() {
-  for (int i = 0; i < 10; i++) {
-    SEVENSegmentSetAllPinsAsOutput();
-    SEVENSegmentDisplayDigit(i);
-    delay(1000);
+  for (int x = 1; x < 3; x++) {
+    TurnDigitOn(x);
+    for (int digit = 0; digit < 10; digit++) {
+      SEVENSegmentSetAllPinsAsOutput();
+      SEVENSegmentDisplayDigit(digit);
+      delay(1000);
+    }
+    TurnDigitOff(x);
   }
 }
