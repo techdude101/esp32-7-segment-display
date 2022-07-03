@@ -149,14 +149,14 @@ void SEVENSegmentDisplayDigit(int digit) {
 
 
 void SEVENSegmentDisplayOff() {
-  SEVENSegmentSetAllPinsAsInput();
-//  digitalWrite(SEVEN_SEG_A, LED_OFF);
-//  digitalWrite(SEVEN_SEG_B, LED_OFF);
-//  digitalWrite(SEVEN_SEG_C, LED_OFF);
-//  digitalWrite(SEVEN_SEG_D, LED_OFF);
-//  digitalWrite(SEVEN_SEG_E, LED_OFF);
-//  digitalWrite(SEVEN_SEG_F, LED_OFF);
-//  digitalWrite(SEVEN_SEG_G, LED_OFF);
+//  SEVENSegmentSetAllPinsAsInput();
+  digitalWrite(SEVEN_SEG_A, LED_OFF);
+  digitalWrite(SEVEN_SEG_B, LED_OFF);
+  digitalWrite(SEVEN_SEG_C, LED_OFF);
+  digitalWrite(SEVEN_SEG_D, LED_OFF);
+  digitalWrite(SEVEN_SEG_E, LED_OFF);
+  digitalWrite(SEVEN_SEG_F, LED_OFF);
+  digitalWrite(SEVEN_SEG_G, LED_OFF);
 }
 
 void SEVENSegmentSetAllPinsAsOutput() {
@@ -179,6 +179,20 @@ void SEVENSegmentSetAllPinsAsInput() {
   pinMode(SEVEN_SEG_G, INPUT);
 }
 
+void displayTwoNumbers(int tens, int units, int delayInMs) {
+  // Display tens
+  SEVENSegmentDisplayDigit(tens);
+  TurnDigitOn(2);
+  delay(delayInMs);
+  TurnDigitOff(2);
+  
+  // Display units
+  SEVENSegmentDisplayDigit(units);
+  TurnDigitOn(1);
+  delay(delayInMs);
+  TurnDigitOff(1);
+}
+
 void setup() {
   // put your setup code here, to run once:
   SEVENSegmentSetAllPinsAsOutput();
@@ -199,13 +213,11 @@ void setup() {
 }
 
 void loop() {
-  for (int x = 1; x < 3; x++) {
-    TurnDigitOn(x);
-    for (int digit = 0; digit < 10; digit++) {
-      SEVENSegmentSetAllPinsAsOutput();
-      SEVENSegmentDisplayDigit(digit);
-      delay(1000);
+  for (int j = 0; j < 100; j++) {
+    int tens = j / 10;
+    int units = j % 10;
+    for (int i = 0; i < 10; i++) {
+      displayTwoNumbers(tens, units, 10);
     }
-    TurnDigitOff(x);
   }
 }
